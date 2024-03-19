@@ -36,6 +36,7 @@ vector<Circle> CalcCentRad(Vec2D &n, vector<Point2d> &pointData) {
 		Point2d P_N = pointData[--t];
 		for (int i = 1; i < t; i++) {
 			Vec3D data = FindCenRad(P_0, pointData[i], P_N);
+			if (data.w == -1) continue;
 			Circle temp{ Point2d{data.x, data.y}, data.w };
 			Vec2D compN = NormCircle(pointData[i], temp);
 			float m = dot(compN, n);
