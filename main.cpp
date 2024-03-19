@@ -26,7 +26,6 @@ Vec2D getGeneralNormVect(vector<Point2d> &pointData) {
 	else return 0;
 }
 
-
 vector<Circle> CalcCentRad(Vec2D &n, vector<Point2d> &pointData) {
 	vector<Circle> res;
 	int t = pointData.size();
@@ -36,18 +35,22 @@ vector<Circle> CalcCentRad(Vec2D &n, vector<Point2d> &pointData) {
 		Point2d P_N = pointData[--t];
 		for (int i = 1; i < t; i++) {
 			Vec3D data = FindCenRad(P_0, pointData[i], P_N);
-			if (data.w == -1) continue;
+			if (data.w == -1) {
+				continue;
+			}
 			Circle temp{ Point2d{data.x, data.y}, data.w };
 			Vec2D compN = NormCircle(pointData[i], temp);
 			float m = dot(compN, n);
 			if (m > 0) {			//на данном этапе отсекаем проблемные и шумные точки. В конечном итоге работа продолжится только с наиболее подходящими точками
 				res.push_back(Circle{ temp.c, data.w });		//вносим найденный радиус и координаты центра окружности
 			}
+			else {
+				pointData.erase(pointData.begin() + i++);
+			}
 		}
 	}
 	return res;		//в итоговом списке получим список центров окружностей и их радиусов, которые попадают под необходимые условия
 }
-
 
 Circle GetOptimalParameters(vector<Circle> &points, vector<Point2d> &pointData) {
 	int s = points.size();
