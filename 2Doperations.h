@@ -1,5 +1,7 @@
 #pragma once
+#define FLT_EPSILON 1.19e-07 
 #include "2dTypes.h"
+
 
 float length(Vec2D const& v) { return sqrt(v.x * v.x + v.y * v.y); }
 float dot(Vec2D const& a, Vec2D const& b) { return a.x * b.x + a.y * b.y; }
@@ -26,22 +28,14 @@ Vec3D FindCenRad(Point2d &a, Point2d &b, Point2d &c) {
 
 
 Vec2D FindNorm(Point2d &A, Point2d &B, Point2d &C) {
-	Vec2D AB = Vec2D{ A, B };
-	AB = norm(AB);
-
-	Vec2D AC = Vec2D{ A, C };
-	float t = dot(AB, AC);			//получаем длину проекции
-
-	float x = A.x + AB.x * t;
-	float y = A.y + AB.y * t;
-	Vec2D n = Vec2D{ C.x - x, C.y - y };		//Получили точку проекции на отрезок, теперь получим вектор нормали к нему и нормализуем его
-	return norm(n);
-}
-
-
-Vec2D NormCircle(Point2d P, Circle circ) {
-	//предполагаем, что тока лежит на окружности. В таком случае вектор нормали будет равен нормализованному вектору между центром и точкой на ней.
-	Vec2D n = Vec2D{ P.x - circ.c.x, P.y - circ.c.y };
-	return norm(n);
-	//возвращаем вектор нормали в точке
+	float x = (A.x * A.x * C.x - 2 * A.x * B.x * C.x + B.x * B.x * C.x + B.x *
+		(A.y - B.y) * (A.y - C.y) - A.x * (A.y - B.y) * (B.y - C.y)) / ((A.x - B.x) *
+		(A.x - B.x) + (A.y - B.y) * (A.y - B.y));
+	float y = (B.x * B.x * A.y + A.x * A.x * B.y + B.x * C.x * (B.y - A.y) - A.x *
+		(C.x * (B.y - A.y) + B.x * (A.y + B.y)) + (A.y - B.y) * (A.y - B.y) * C.y) / ((
+			A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y));
+	Point2d p(x, y);
+	Vec2D n(p, C);
+	n = norm(n);
+	return n;
 }

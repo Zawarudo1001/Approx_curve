@@ -11,6 +11,7 @@ struct Point2d {
 struct Vec2D{
 	float x, y;
 
+	Vec2D(){}
 	Vec2D(float value) : x(value), y(value) {}
 	Vec2D(float _x, float _y) : x(_x), y(_y) {}
 	Vec2D(Point2d s, Point2d e) : x(e.x - s.x), y(e.y - s.y) {}
