@@ -10,6 +10,7 @@
 using namespace std;
 
 
+//commit 1
 Vec2D getGeneralNormVect(vector<Point2d> &pointData, vector<Vec2D> &normData) {
 	Vec2D n = 0;
 	Vec2D temp;
